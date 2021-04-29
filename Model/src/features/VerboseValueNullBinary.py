@@ -35,16 +35,17 @@ class VerboseValueNullBinary(Feature):
         self.df_etl[null_key].loc[~null_indexes] = 0
 
     def _string_clean_up(self):
-        def clean_up(row):
+        def _clean_up(row):
             try:
                 clean = re.sub(r'[^\w\s]', '', row.lower()).split(' ')
                 return clean
 
             except:
+                # Run it and see if there are many rows with parse error
                 return ['none']
 
         # Lower case string, Remove Punctuation, and Split on ' '
-        self.col_etl = self.col_etl.apply(lambda x: clean_up(x))
+        self.col_etl = self.col_etl.apply(lambda x: _clean_up(x))
 
     def _word_count_catergorical(self):
         """Create Catergorical columns based on word count thresholds and
@@ -62,7 +63,7 @@ class VerboseValueNullBinary(Feature):
         # Else Make list of words below threshold if most_common = False
         else:
             word_feats = [(x) for (x, y) in results.most_common()
-                          if y < self.threshold]
+                          if y <= self.threshold]
 
         # For Each word in list, make column and assign Binary value
         for word in word_feats:

@@ -9,9 +9,9 @@ class CategoricalValueNullBinary(Feature):
 
     def run_etl(self):
         """Run ETL of the column."""
-        # self._replace_nans()
+        self._replace_nans()
         # self._cast()
-        # self._add_is_null_column()
+        self._add_is_null_column()
         self._one_hot_encode()
 
     def _cast(self):
