@@ -1,23 +1,4 @@
-import psycopg2
-import scrapy
-from scrapy.crawler import CrawlerProcess
-from config import DB_HOST, DB_DATABASE, DB_USER, DB_PASSWORD, DB_PORT, SCRAPY_API
-
-connection = psycopg2.connect(
-    host=DB_HOST,
-    database=DB_DATABASE,
-    user=DB_USER,
-    password=DB_PASSWORD,
-    port=DB_PORT
-)
-cur = connection.cursor()
-
-filezip = open('zipcodes.txt', 'r')
-zipcode = filezip.read().split('\n')
-postcodes = [z.strip() for z in zipcode if z.strip()]
-
-
-class realtor(scrapy.Spider):
+class RealtorScraper(scrapy.Spider):
     name = 'realtor'
     custom_settings = {
         'DOWNLOADER_MIDDLEWARES': {'scrapy_crawlera.CrawleraMiddleware': 610},
@@ -608,10 +589,3 @@ class realtor(scrapy.Spider):
 
     def close(spider, reason):
         connection.close()
-
-
-process = CrawlerProcess({
-    'USER_AGENT': "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36"})
-
-process.crawl(realtor)
-process.start()
