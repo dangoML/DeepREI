@@ -1,5 +1,6 @@
 import scrapy
 from scrapy.crawler import CrawlerProcess
+from config import SCRAPY_API
 
 
 class RealtorScraper(scrapy.Spider):
