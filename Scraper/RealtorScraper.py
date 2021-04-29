@@ -1,3 +1,7 @@
+import scrapy
+from scrapy.crawler import CrawlerProcess
+
+
 class RealtorScraper(scrapy.Spider):
     name = 'realtor'
     custom_settings = {
