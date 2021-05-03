@@ -7,14 +7,46 @@ class Feature:
 
         'col' must be a pandas Series object.
         """
+        # ETL Inputs
         self.col_series = col_series
         self.name = self.col_series.name
         self.col_etl = col_series.copy()
 
-        # Is this here because we end up creating a df as a result??
+        # ETL Outputs
         self.df_etl = pd.DataFrame()
+        self.df_value = pd.DataFrame()
+        self.df_null = pd.DataFrame()
 
-    def _replace_nans(self, values_to_replace=["None", ]):
+    def _replace_nans(self, values_to_replace=["None"]):
         """Replace specified values with None values."""
         for value in values_to_replace:
             self.col_etl.loc[self.col_etl == value] = None
+
+    def _add_value_column_df(self):
+        """Create an _value column."""
+        # Grab indexes of null columns
+        null_indexes = pd.isna(self.col_etl)
+
+        # Create 'value' column variant name
+        value_key = "_".join([self.name, "value"])
+
+        # Create Binary 'value' and 'null' column variants in DataFrame
+        self.df_value[value_key] = self.col_etl.fillna(0)
+
+    def _add_is_null_column_df(self):
+        """Create an is_null column."""
+       # Grab indexes of null columns
+        null_indexes = pd.isna(self.col_etl)
+
+        # Create 'null' column variant names
+        null_key = "_".join([self.name, "is_null"])
+
+        # Create Binary 'null' column variants in DataFrame
+        self.df_null[null_key] = self.col_etl.fillna(1)
+        self.df_null[null_key].loc[~null_indexes] = 0
+
+    def _build_etl_df(self):
+        """Combine all dfs into one and cast as float"""
+        self.df_etl = pd.concat(
+            [self.df_etl, self.df_null, self.df_value], axis=1)
+        self.df_etl = self.df_etl.astype(float)

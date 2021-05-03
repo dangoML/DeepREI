@@ -14,28 +14,15 @@ class VerboseValueNullBinary(Feature):
     def run_etl(self):
         """Run ETL of the column."""
         self._replace_nans()
-        self._add_is_null_column()
-        self._string_clean_up()
+        self._add_is_null_column_df()
+        self._string_to_list()
         self._word_count_catergorical()
+        self._build_etl_df()
 
-    def _cast(self):
-        """Cast all values in the column to ensure correct type."""
-        self.col_etl = self.col_etl.astype(float)
+    def _string_to_list(self):
+        """Clean up strings and transform them into list of strings."""
 
-    def _add_is_null_column(self):
-        """Create an is_null column."""
-        # Grab indexes of null columns
-        null_indexes = pd.isna(self.col_etl)
-
-        # Create 'null' column variant names
-        null_key = "_".join([self.name, "is_null"])
-
-        # Create Binary 'null' column variants in DataFrame
-        self.df_etl[null_key] = self.col_etl.fillna(1)
-        self.df_etl[null_key].loc[~null_indexes] = 0
-
-    def _string_clean_up(self):
-        def _clean_up(row):
+        def _remove_punctuation_make_list(row):
             try:
                 clean = re.sub(r'[^\w\s]', '', row.lower()).split(' ')
                 return clean
@@ -45,7 +32,7 @@ class VerboseValueNullBinary(Feature):
                 return ['none']
 
         # Lower case string, Remove Punctuation, and Split on ' '
-        self.col_etl = self.col_etl.apply(lambda x: _clean_up(x))
+        self.col_etl = self.col_etl.apply(lambda x: _remove_punctuation(x))
 
     def _word_count_catergorical(self):
         """Create Catergorical columns based on word count thresholds and
