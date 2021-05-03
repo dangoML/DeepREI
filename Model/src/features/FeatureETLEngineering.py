@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-class Feature:
+class FeatureETLEngineering:
     def __init__(self, col_series):
         """Instantiate new feature class.
 
@@ -45,7 +45,7 @@ class Feature:
         self.df_null[null_key] = self.col_etl.fillna(1)
         self.df_null[null_key].loc[~null_indexes] = 0
 
-    def _build_etl_df(self):
+    def _build_feature_etl_df(self):
         """Combine all dfs into one and cast as float"""
         self.df_etl = pd.concat(
             [self.df_etl, self.df_null, self.df_value], axis=1)

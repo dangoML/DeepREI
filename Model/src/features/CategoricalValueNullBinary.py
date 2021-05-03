@@ -1,10 +1,10 @@
-from src.features.feature import Feature
+from src.features.FeatureETLEngineering import FeatureETLEngineering
 import pandas as pd
 
 
-class CategoricalValueNullBinary(Feature):
+class CategoricalValueNullBinary(FeatureETLEngineering):
     def __init__(self, col_series):
-        """Instantiate new dollar value feature."""
+        """Instantiate categorical feature."""
         super().__init__(col_series)  # Super?
 
     def run_etl(self):
@@ -12,7 +12,7 @@ class CategoricalValueNullBinary(Feature):
         self._replace_nans()
         self._add_is_null_column_df()
         self._one_hot_encode_df()
-        self._build_etl_df()
+        self._build_feature_etl_df()
 
     def _one_hot_encode_df(self):
         """One Hot Encode and add new columns to df_etl"""

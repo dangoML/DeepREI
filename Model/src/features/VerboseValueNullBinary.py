@@ -1,10 +1,10 @@
-from src.features.feature import Feature
+from src.features.FeatureETLEngineering import FeatureETLEngineering
 from collections import Counter
 import re
 import pandas as pd
 
 
-class VerboseValueNullBinary(Feature):
+class VerboseValueNullBinary(FeatureETLEngineering):
     def __init__(self, col_series, threshold, most_common):
         """Instantiate Verbose Feature."""
         super().__init__(col_series)  # Super?
@@ -17,7 +17,7 @@ class VerboseValueNullBinary(Feature):
         self._add_is_null_column_df()
         self._string_to_list()
         self._word_count_catergorical()
-        self._build_etl_df()
+        self._build_feature_etl_df()
 
     def _string_to_list(self):
         """Clean up strings and transform them into list of strings."""
@@ -32,7 +32,8 @@ class VerboseValueNullBinary(Feature):
                 return ['none']
 
         # Lower case string, Remove Punctuation, and Split on ' '
-        self.col_etl = self.col_etl.apply(lambda x: _remove_punctuation(x))
+        self.col_etl = self.col_etl.apply(
+            lambda x: _remove_punctuation_make_list(x))
 
     def _word_count_catergorical(self):
         """Create Catergorical columns based on word count thresholds and
