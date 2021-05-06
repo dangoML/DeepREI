@@ -5,7 +5,7 @@ import pandas as pd
 class NumericValueNullBinary(FeatureETLEngineering):
     def __init__(self, col_series):
         """Instantiate numeric feature."""
-        super().__init__(col_series)  # Super?
+        super().__init__(col_series)
 
     def run_etl(self):
         """Run ETL of the column."""

@@ -5,7 +5,7 @@ import pandas as pd
 class CategoricalValueNullBinary(FeatureETLEngineering):
     def __init__(self, col_series):
         """Instantiate categorical feature."""
-        super().__init__(col_series)  # Super?
+        super().__init__(col_series)
 
     def run_etl(self):
         """Run ETL of the column."""

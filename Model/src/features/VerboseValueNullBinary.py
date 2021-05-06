@@ -7,9 +7,9 @@ import pandas as pd
 class VerboseValueNullBinary(FeatureETLEngineering):
     def __init__(self, col_series, threshold, most_common):
         """Instantiate Verbose Feature."""
-        super().__init__(col_series)  # Super?
-        self.threshold = threshold
+        super().__init__(col_series)
         self.most_common = most_common
+        self.threshold = threshold
 
     def run_etl(self):
         """Run ETL of the column."""
