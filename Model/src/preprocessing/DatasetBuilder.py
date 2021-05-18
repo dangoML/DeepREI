@@ -1,6 +1,6 @@
 
 from src.preprocessing.DatasetPreprocessor import DatasetPreprocessor
-from src.features.target.TargetVariableCreator import TargetVariableCreator
+from src.targetvar.TargetVariableCreator import TargetVariableCreator
 from src.features.numeric.NumericValueNullCreator import NumericValueNullCreator
 from src.features.verbose.VerboseValueNullBinaryCreator import VerboseValueNullBinaryCreator
 
