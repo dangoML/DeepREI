@@ -2,14 +2,14 @@ import pandas as pd
 
 
 class FeatureETLEngineering:
-    def __init__(self, col_series):
+    def __init__(self, col_series, name):
         """Instantiate new feature class.
 
         'col' must be a pandas Series object.
         """
         # ETL Inputs
         self.col_series = col_series
-        self.name = self.col_series.name
+        self.name = name
         self.col_etl = col_series.copy()
 
         # ETL Outputs
@@ -24,13 +24,10 @@ class FeatureETLEngineering:
 
     def _add_value_column_df(self):
         """Create an _value column."""
-        # Grab indexes of null columns
-        null_indexes = pd.isna(self.col_etl)
-
         # Create 'value' column variant name
         value_key = "_".join([self.name, "value"])
 
-        # Create Binary 'value' and 'null' column variants in DataFrame
+        # Create 'value' column variant in DataFrame
         self.df_value[value_key] = self.col_etl.fillna(0)
 
     def _add_is_null_column_df(self):
@@ -45,8 +42,28 @@ class FeatureETLEngineering:
         self.df_null[null_key] = self.col_etl.fillna(1)
         self.df_null[null_key].loc[~null_indexes] = 0
 
+    def _cast_float_keep_string(self):
+        """Conver Values to Floats, if not Keep orig value."""
+        def _cast_float_keep_string_internal(row):
+            try:
+                row = float(row)
+                return row
+            except:
+                return row
+
+        self.col_etl = self.col_etl.apply(_cast_float_keep_string_internal)
+
+    def _one_hot_encode_df(self):
+        """One Hot Encode and add new columns to df_etl"""
+        # One-Hot-Encode all Categorical Columns
+        temp_dummies_df = pd.get_dummies(
+            self.col_etl, prefix=f'{self.col_etl.name}_cat', drop_first=True)
+
+        # Concat One-Hot Columns to df
+        self.df_etl = pd.concat([self.df_etl, temp_dummies_df], axis=1)
+
     def _build_feature_etl_df(self):
         """Combine all dfs into one and cast as float"""
-        self.df_etl = pd.concat(
+        self.df_model = pd.concat(
             [self.df_etl, self.df_null, self.df_value], axis=1)
-        self.df_etl = self.df_etl.astype(float)
+        self.df_model = self.df_model.astype(float)
