@@ -1,6 +1,6 @@
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from src.targetvar.TargetVariableCreator import TargetVariableCreator
+from src.features.targetvar.TargetVariableCreator import TargetVariableCreator
 from src.features.numeric.NumericValueNullCreator import NumericValueNullCreator
 from src.features.categorical.CategoricalValueNullBinaryNominalCreator import CategoricalValueNullBinaryNominalCreator
 from src.features.verbose.VerboseValueNullBinaryCreator import VerboseValueNullBinaryCreator
@@ -16,9 +16,6 @@ class DatasetPreprocessor(TargetVariableCreator, NumericValueNullCreator, Catego
 
         # Inputs
         self.dataset = dataset[dataset['listingtype'] == 'sold']
-        
-        TVC = TargetVariableCreator(dataset=self.dataset, target_var=target_var)
-        
         NumericValueNullCreator.__init__(
             self, cont_num_columns, discrete_num_columns)
         CategoricalValueNullBinaryNominalCreator.__init__(

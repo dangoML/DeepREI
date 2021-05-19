@@ -1,6 +1,6 @@
 
 from src.preprocessing.DatasetPreprocessor import DatasetPreprocessor
-from src.targetvar.TargetVariableCreator import TargetVariableCreator
+from src.features.targetvar.TargetVariableCreator import TargetVariableCreator
 from src.features.numeric.NumericValueNullCreator import NumericValueNullCreator
 from src.features.verbose.VerboseValueNullBinaryCreator import VerboseValueNullBinaryCreator
 
@@ -16,10 +16,13 @@ class DatasetBuilder(DatasetPreprocessor):
     def build_model_input(self):
         """Run ETL of the column."""
         self._create_target_variable()
-        self._create_numeric_features()
+        # self._create_numeric_features()
         # self._create_verbose_features()
         # self._create_custom_categorical_nominal_features()
         # self._create_categorical_nominal_features()
         # self._target_var_greater_than_zero()
         # self._train_valid_test_split()
         # # self._scale_train_valid_test()
+
+    #Another IDEA, instantiate creator object
+    # TVC = TargetVariableCreator(dataset=self.dataset, target_var=target_var)
