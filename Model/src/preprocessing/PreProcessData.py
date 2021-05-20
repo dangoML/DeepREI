@@ -1,6 +1,6 @@
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from src.features.CreateFeatures import CreateFeatures
+from src.preprocessing.CreateFeatures import CreateFeatures
 import pandas as pd
 
 

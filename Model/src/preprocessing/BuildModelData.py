@@ -1,4 +1,4 @@
-from src.features.PreProcessData import PreProcessData
+from src.preprocessing.PreProcessData import PreProcessData
 
 
 class BuildModelData(PreProcessData):
