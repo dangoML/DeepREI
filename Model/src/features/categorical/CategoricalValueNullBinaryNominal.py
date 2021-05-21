@@ -2,7 +2,7 @@ from src.features.FeatureETLEngineering import FeatureETLEngineering
 import pandas as pd
 
 
-class CategoricalValueNullBinary(FeatureETLEngineering):
+class CategoricalValueNullBinaryNominal(FeatureETLEngineering):
     def __init__(self, col_series):
         """Instantiate categorical feature."""
         super().__init__(col_series)

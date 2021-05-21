@@ -26,8 +26,7 @@ class CreateFeatures():
         """ETL our Continuous Target Variable."""
 
         # Loop through each column and create numeric feature
-        target = ContinuousTargetVariable(self.target_cont_column)
-        target.run_etl()
+        target = ContinuousTargetVariable(self.target_cont_column).run_etl()
         self.df_model = pd.concat([self.df_model, target.df_etl], axis=1)
 
     def _create_numeric_features(self):
@@ -35,8 +34,7 @@ class CreateFeatures():
 
         # Loop through each column and create numeric feature
         for column in self.num_columns:
-            numeric = NumericValueNullBinary(self.dataset[column])
-            numeric.run_etl()
+            numeric = NumericValueNullBinary(self.dataset[column]).run_etl()
             self.df_model = pd.concat([self.df_model, numeric.df_etl], axis=1)
 
     def _create_verbose_features(self):
@@ -45,8 +43,7 @@ class CreateFeatures():
         # Loop through each column and create verbose feature
         for column in self.num_columns:
             verbose = VerboseValueNullBinary(
-                self.dataset[column], threshold=self.verbose_threshold, most_common=self.verbose_most_common)
-            verbose.run_etl()
+                self.dataset[column], threshold=self.verbose_threshold, most_common=self.verbose_most_common).run_etl()
             self.df_model = pd.concat([self.df_model, verbose.df_etl], axis=1)
 
     def _create_categorical_features(self):
@@ -54,7 +51,25 @@ class CreateFeatures():
 
         # Loop through each column and create categorical feature
         for column in self.num_columns:
-            categorical = CategoricalValueNullBinary(self.dataset[column])
-            categorical.run_etl()
+            categorical = CategoricalValueNullBinary(self.dataset[column]).run_etl()
             self.df_model = pd.concat(
                 [self.df_model, categorical.df_etl], axis=1)
+
+
+import pandas as pd
+from src.features.FeatureETLEngineering import FeatureETLEngineering
+
+class CategoricalValueNullBinaryNominal(FeatureETLEngineering):
+    def __init__(self, col_series, name):
+        """Instantiate categorical feature."""
+        super().__init__(col_series, name)
+
+    def run_etl(self):
+        """Run ETL of the column."""
+        self._replace_nans()
+        self._add_is_null_column_df()
+        self._cast_float_keep_string()
+        self._add_value_column_df()  # ONLY INCLUDE FOR EDA PURPOSES!!
+        self._one_hot_encode_df()
+        self._build_feature_etl_df()
+
