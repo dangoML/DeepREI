@@ -18,6 +18,10 @@ class ModelInputPreprocessor(ModelInputETL):
         self.df_X_test = pd.DataFrame()
         self.df_y_test = pd.DataFrame()
 
+    def _target_var_greater_than_zero(self):
+        """Filter for all property values greater than zero."""
+        self.df_model = self.df_model[self.df_model[self.target_var] > 0] 
+
     def _train_valid_test_split(self):
         """Split dataset into training, validation, test"""
 
@@ -47,6 +51,3 @@ class ModelInputPreprocessor(ModelInputETL):
         self.df_X_train = sc.fit_transform(self.df_X_train)
         self.df_X_valid = sc.transform(self.df_X_valid)
         self.df_X_test = sc.transform(self.df_X_test)
-
-    def _target_var_greater_than_zero(self):
-        pass

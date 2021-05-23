@@ -11,5 +11,6 @@ class ModelInputBuilder(ModelInputPreprocessor):
     def build_model_input(self):
         """Build Model Input Table."""
         self._etl_dataset()
+        self._target_var_greater_than_zero()
         self._train_valid_test_split()
         # self._scale_train_valid_test()
