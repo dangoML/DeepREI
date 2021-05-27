@@ -5,12 +5,13 @@ import seaborn as sns
 import matplotlib.ticker as ticker
 
 class DiscreteUnivariateAnalyzer():
-    def __init__(self, dataset, suffix='', feature_col_names=[]):
+    def __init__(self, dataset, target_col_name='', suffix='', feature_col_names=[]):
         '''Continuous Numeric Univariate Feature Analysis: Statistics and Visualizations'''
         # Inputs
         self.dataset = dataset
         self.suffix = suffix
         self.feature_col_names = feature_col_names
+        self.target_col_name = target_col_name
 
     def run_eda(self):
         '''Run EDA'''
@@ -22,6 +23,11 @@ class DiscreteUnivariateAnalyzer():
 
         # Loop through each column name 
         for feature in self.feature_col_names:
+
+            plt.figure(figsize=(20, 5))
+
+            ### Frequency Plot ###
+            plt.subplot(1, 2, 1)
             feature += self.suffix
             ax = sns.countplot(x=feature , data=self.dataset[self.dataset[feature]>0])
             plt.title(f"{feature}")
@@ -57,5 +63,10 @@ class DiscreteUnivariateAnalyzer():
 
             # And use a MultipleLocator to ensure a tick spacing of 10
             ax2.yaxis.set_major_locator(ticker.MultipleLocator(10))
+
+            ### TargetVar Box Plot Split on cats ###
+            plt.subplot(1, 2, 2)
+            sns.boxplot(data=self.dataset, x=feature, y=self.target_col_name)
+            plt.title(f"{feature}")
 
             plt.show()
