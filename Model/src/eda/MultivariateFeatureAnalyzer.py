@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 class MultivariateFeatureAnalyzer():
-    def __init__(self, is_target_continuous=True, is_feature_continuous=True, dataset=None, target_col_name='', feature_col_names=[], suffix=""):
+    def __init__(self, dataset=None, is_target_continuous=True, is_feature_continuous=True, target_col_name='', feature_col_names=[], suffix=""):
         """Bivariate Statistics and Visualizations for Continuous/Categorical Features."""
 
         # Inputs

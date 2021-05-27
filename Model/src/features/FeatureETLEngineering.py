@@ -45,6 +45,15 @@ class FeatureETLEngineering:
         self.df_null[null_key] = self.col_etl.fillna(1)
         self.df_null[null_key].loc[~null_indexes] = 0
 
+    def _one_hot_encode_df(self):
+        """One Hot Encode and add new columns to df_etl"""
+        # One-Hot-Encode all Categorical Columns
+        temp_dummies_df = pd.get_dummies(
+            self.col_etl, prefix=f'{self.col_etl.name}_', drop_first=True)
+
+        # Concat One-Hot Columns to df
+        self.df_etl = pd.concat([self.df_etl, temp_dummies_df], axis=1)
+
     def _build_feature_etl_df(self):
         """Combine all dfs into one and cast as float"""
         self.df_etl = pd.concat(

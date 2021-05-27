@@ -2,10 +2,10 @@ import pandas as pd
 from src.features.FeatureETLEngineering import FeatureETLEngineering
 
 
-class CategoricalValueNullBinaryNominalCustom_area(FeatureETLEngineering):
-    def __init__(self, col_series, name):
+class CategoricalValueNullBinaryNominal_area(FeatureETLEngineering):
+    def __init__(self, col_series):
         """Instantiate categorical feature."""
-        super().__init__(col_series, name)
+        super().__init__(col_series)
 
     def run_etl(self):
         """Run ETL of the column."""

@@ -14,6 +14,9 @@ class VerboseFeatureCreator():
         # Outputs
         self.df_etl = pd.DataFrame()
 
+    def run_feature_etl(self):
+        self._create_verbose_features()
+
     def _create_verbose_features(self):
         """ETL our Verbose Features."""
         # Loop through each column and create verbose feature
