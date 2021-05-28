@@ -3,6 +3,7 @@ import seaborn as sns
 import numpy as np
 import pandas as pd
 
+
 class ContinuousUnivariateAnalyzer():
     def __init__(self, dataset, feature_col_name='', suffix="", bins=100, x_axis_limit=None):
         '''Continuous Numeric Univariate Feature Analysis: Statistics and Visualizations'''
@@ -39,7 +40,7 @@ class ContinuousUnivariateAnalyzer():
         # Calculate Quartiles
         quartiles = np.percentile(self.dataset, [25, 50, 75])
         self.five_num_sum = self.five_num_sum.append(pd.DataFrame(data=[[self.feature_col_name, self.data_min, quartiles[0], quartiles[1], quartiles[2], self.data_max]],
-                                                                    columns=['Feature', 'Min', 'Q1', 'Median', 'Q3', 'Max']))
+                                                                  columns=['Feature', 'Min', 'Q1', 'Median', 'Q3', 'Max']))
 
         # Return results
         display(self.five_num_sum)

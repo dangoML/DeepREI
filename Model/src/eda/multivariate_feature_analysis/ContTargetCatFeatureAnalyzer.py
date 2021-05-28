@@ -3,11 +3,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 import matplotlib.ticker as ticker
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
 
 
-class DiscreteUnivariateAnalyzer():
+class ContTargetCatFeatureAnalyzer():
     def __init__(self, dataset, target_col_name='', suffix='', feature_col_names=[]):
-        '''Continuous Numeric Univariate Feature Analysis: Statistics and Visualizations'''
+        '''Continuous vs Categorical Feature Analysis: Statistics and Visualizations'''
         # Inputs
         self.dataset = dataset
         self.suffix = suffix
@@ -16,18 +18,16 @@ class DiscreteUnivariateAnalyzer():
 
     def run_eda(self):
         '''Run EDA'''
-        self._discrete_univariate_statistics()
+        self._cont_target_vs_cat_features()
 
-    def _discrete_univariate_statistics(self):
+    def _cont_target_vs_cat_features(self):
         '''Visualize Discrete Univariate Statistics'''
-        plt.figure(figsize=(10, 5))
 
         # Loop through each column name
         for feature in self.feature_col_names:
+            plt.figure(figsize=(15, 5))
 
-            plt.figure(figsize=(20, 5))
-
-            ### Frequency Plot ###
+            # Frequency Plot ###
             plt.subplot(1, 2, 1)
             feature += self.suffix
             ax = sns.countplot(
@@ -66,8 +66,17 @@ class DiscreteUnivariateAnalyzer():
             # And use a MultipleLocator to ensure a tick spacing of 10
             ax2.yaxis.set_major_locator(ticker.MultipleLocator(10))
 
-            # ### TargetVar Box Plot Split on cats ###
-            # plt.subplot(1, 2, 2)
-            # sns.boxplot(data=self.dataset, x=feature, y=self.target_col_name)
-            # plt.title(f"{feature}")
+            ### TargetVar Box Plot Split on cats ###
+            plt.subplot(1, 2, 2)
+            sns.boxplot(data=self.dataset, x=feature, y=self.target_col_name)
+            plt.title(f"{feature}")
+
             plt.show()
+
+            ### ANOVA 1-Way Analysis ###
+            mod = ols(f'lastsoldprice ~ {feature}', data=self.dataset[[
+                self.target_col_name, feature]]).fit()
+            aov_table = sm.stats.anova_lm(mod, typ=2)
+            display(aov_table)
+            print('''
+            ''')
