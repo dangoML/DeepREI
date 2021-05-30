@@ -41,5 +41,5 @@ class ModelInputPCA(ModelInputPreprocessor):
 
             # Combine PCA df with train,valid,test dfs
             self.df_X_train = pd.concat([self.df_X_train,new_columns_train],axis=1)
-            self.df_X_valid = pd.concat([self.df_X_train,new_columns_valid],axis=1)
-            self.df_X_test = pd.concat([self.df_X_train,new_columns_test],axis=1)
+            self.df_X_valid = pd.concat([self.df_X_valid,new_columns_valid],axis=1)
+            self.df_X_test = pd.concat([self.df_X_test,new_columns_test],axis=1)
