@@ -27,11 +27,11 @@ class MultivariateFeatureAnalyzer():
             # Run EDA
         if self.targetvar_type == 'continuous' and feature_type == 'discrete':
             eda = ContTargetDiscreteFeatureAnalyzer(dataset=self.dataset, target_col_name=self.target_col_name,
-                                               suffix=self.suffix, feature_col_names=self.feature_col_names)
+                                                    suffix=self.suffix, feature_col_names=self.feature_col_names)
             eda.run_eda()
 
             # Run EDA
         if self.targetvar_type == 'continuous' and feature_type == 'nominal':
             eda = ContTargetNominalFeatureAnalyzer(dataset=self.dataset, target_col_name=self.target_col_name,
-                                               suffix=self.suffix, feature_col_names=self.feature_col_names)
+                                                   suffix=self.suffix, feature_col_names=self.feature_col_names)
             eda.run_eda()
