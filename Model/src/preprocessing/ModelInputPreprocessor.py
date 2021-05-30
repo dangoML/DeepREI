@@ -39,7 +39,6 @@ class ModelInputPreprocessor(ModelInputETL):
         # Specify X and y
         y = self.df_model[self.target_var]
         X = self.df_model.drop(self.target_var, axis=1)
-        x_train, x_test, y_train, y_test = train_test_split(x, y)
 
         # Create Test Split
         X_train, X_test, y_train, y_test = train_test_split(
