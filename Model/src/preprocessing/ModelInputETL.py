@@ -48,3 +48,9 @@ class ModelInputETL():
 
         # Return Model Input DF
         self.df_model = pd.concat([target.df_etl,numeric.df_etl,categorical.df_etl,verbose.df_etl],axis=1)
+
+        # Remove variables from memory
+        del target
+        del numeric
+        del categorical
+        del verbose

@@ -18,7 +18,7 @@ class ModelInputDimReduc(ModelInputPreprocessor):
 
         for pca_column in self.pca_columns:
             # Return DF filtered on orig columns
-            orig_columns = [x for x in self.df_model.columns if pca_column+'_' in x and '_is_null' not in x]
+            orig_columns = [x for x in self.df_X_train.columns if pca_column+'_' in x and '_is_null' not in x]
             orig_columns_train = self.df_X_train[orig_columns]
             orig_columns_valid = self.df_X_valid[orig_columns]
             orig_columns_test = self.df_X_test[orig_columns]
@@ -45,5 +45,4 @@ class ModelInputDimReduc(ModelInputPreprocessor):
             self.df_X_valid = pd.concat([self.df_X_valid,new_columns_valid],axis=1)
             self.df_X_test = pd.concat([self.df_X_test,new_columns_test],axis=1)
 
-        # Clear df_model memory
-        self.df_model = pd.DataFrame()
+        

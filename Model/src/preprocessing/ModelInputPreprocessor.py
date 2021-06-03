@@ -43,9 +43,16 @@ class ModelInputPreprocessor(ModelInputETL):
         y = self.df_model[self.target_var]
         X = self.df_model.drop(self.target_var, axis=1)
 
+        # Clear df_model memory
+        del self.df_model
+
         # Create Test Split
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.2, random_state=1)
+
+        # Clear X and y from memory
+        del X
+        del y
 
         # Create Train and Validation Split
         X_train, X_valid, y_train, y_valid = train_test_split(
