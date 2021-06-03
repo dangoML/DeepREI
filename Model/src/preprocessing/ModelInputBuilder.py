@@ -1,9 +1,9 @@
-from src.preprocessing.ModelInputPCA import ModelInputPCA
+from src.preprocessing.ModelInputDimReduc import ModelInputDimReduc
 
 import pandas as pd
 
 
-class ModelInputBuilder(ModelInputPCA):
+class ModelInputBuilder(ModelInputDimReduc):
     def __init__(self, dataset, target_var='', cont_num_columns=[], discrete_num_columns=[], nominal_cat_columns=[],
                  verbose_columns=[], verbose_threshold=[], verbose_most_common=[], pca_columns=[], pca_expl_var=.95):
         """Instantiate Model Input Table."""

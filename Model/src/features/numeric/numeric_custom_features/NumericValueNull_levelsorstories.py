@@ -16,5 +16,8 @@ class NumericValueNull_levelsorstories(FeatureETLEngineering):
 
     def _replace_strings_with_floats(self):
         """Replace specific string values with float equivalent"""
+        
         self.col_etl = self.col_etl.str.replace('1, 1','1.0')
         self.col_etl = self.col_etl.str.replace('1, 2','1.0')
+        self.col_etl = self.col_etl.str.replace('2, 1','2.0')
+        self.col_etl = self.col_etl.str.replace('2, 3','2.0')

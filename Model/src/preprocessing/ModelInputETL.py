@@ -27,18 +27,22 @@ class ModelInputETL():
     def _etl_dataset(self):
         """Run ETL on Dataset."""
         # ETL Target Variable
+        print('Performing ETL: Target Variable')
         target = TargetVariableCreator(self.dataset,self.target_var)
         target.run_feature_etl()
     
         # ETL Numeric Features
+        print('Performing ETL: Numeric Features')
         numeric = NumericFeatureCreator(self.dataset, cont_num_columns=self.cont_num_columns, discrete_num_columns=self.discrete_num_columns)
         numeric.run_feature_etl()
 
         # ETL Categorical Features
+        print('Performing ETL: Categorical Features')
         categorical = CategoricalFeatureCreator(self.dataset,self.nominal_cat_columns)
         categorical.run_feature_etl()
 
         # ETL Verbose Features
+        print('Performing ETL: Verbose Features')
         verbose = VerboseFeatureCreator(self.dataset,verbose_columns=self.verbose_columns, verbose_threshold=self.verbose_threshold, verbose_most_common=self.verbose_most_common)
         verbose.run_feature_etl()
 

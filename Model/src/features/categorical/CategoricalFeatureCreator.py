@@ -1,5 +1,6 @@
 from src.features.categorical.CategoricalValueNullBinaryNominal import CategoricalValueNullBinaryNominal
 from src.features.categorical.nominal_custom_features.CategoricalValueNullBinaryNominal_area import CategoricalValueNullBinaryNominal_area
+from src.features.categorical.nominal_custom_features.CategoricalValueNullBinaryNominal_zipcode import CategoricalValueNullBinaryNominal_zipcode
 import pandas as pd
 
 
@@ -34,6 +35,14 @@ class CategoricalFeatureCreator():
             self.dataset['area'])
         categorical.run_etl()
         self.cat_custom_nominals += ['area']
+        self.df_etl = pd.concat(
+                [self.df_etl, categorical.df_etl], axis=1)
+
+        # Zipcode Custom Handler
+        categorical = CategoricalValueNullBinaryNominal_zipcode(
+            self.dataset['propertyurl'])
+        categorical.run_etl()
+        self.cat_custom_nominals += ['zipcode']
         self.df_etl = pd.concat(
                 [self.df_etl, categorical.df_etl], axis=1)
 

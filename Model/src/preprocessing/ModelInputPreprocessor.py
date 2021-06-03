@@ -21,11 +21,13 @@ class ModelInputPreprocessor(ModelInputETL):
         self.df_y_test = pd.DataFrame()
 
     def _drop_nan_rows(self):
+        print('Dropping Nan Rows')
         """Drop rows that have atleast 3 non-nan values."""
         # Target Value must be greater than zero
         self.dataset = self.dataset.replace(to_replace='None', value=np.nan).dropna(thresh=3)
 
     def _feature_limit_filters(self):
+        print('Applying Feature Limit Filters')
         """Filter for all property values greater than zero."""
         # Target Value must be greater than zero
         self.df_model = self.df_model[self.df_model[self.target_var] > 0]
@@ -34,6 +36,7 @@ class ModelInputPreprocessor(ModelInputETL):
         self.df_model = self.df_model[self.df_model['garagespaces_value'] < 20]
 
     def _train_valid_test_split(self):
+        print('Performing Train, Valid, Test Split')
         """Split dataset into training, validation, test"""
 
         # Specify X and y
@@ -54,6 +57,7 @@ class ModelInputPreprocessor(ModelInputETL):
         self.df_X_test, self.df_y_test = X_test.reset_index(drop=True), y_test.reset_index(drop=True)
 
     def _scale_train_valid_test(self):
+        print('Scaling Data')
         """Scale all Ind. Variable (Features)"""
         sc = StandardScaler()
         columns = self.df_X_train.columns

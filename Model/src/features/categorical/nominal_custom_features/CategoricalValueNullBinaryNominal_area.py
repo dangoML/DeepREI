@@ -12,7 +12,6 @@ class CategoricalValueNullBinaryNominal_area(FeatureETLEngineering):
         self._replace_nans()
         self._add_is_null_column_df()
         self._replace_strings_with_floats()
-        # self._add_value_column_df()  # ONLY INCLUDE FOR EDA PURPOSES!!
         self._create_custom_bins()
         self._one_hot_encode_df()
         self._build_feature_etl_df()
