@@ -16,5 +16,5 @@ class ModelInputBuilder(ModelInputDimReduc):
         self._etl_dataset()
         self._feature_limit_filters()
         self._train_valid_test_split()
-        self._scale_train_valid_test()
-        self._pca_transform()
+        # self._scale_train_valid_test()
+        # self._pca_transform()

@@ -43,6 +43,12 @@ class ModelInputPreprocessor(ModelInputETL):
         y = self.df_model[self.target_var]
         X = self.df_model.drop(self.target_var, axis=1)
 
+        # Re-Order X columns
+        cont_value_columns = [x+'_value' for x in self.cont_num_columns+self.discrete_num_columns]
+        rest_of_columns = set(X.columns).difference(set(cont_value_columns))
+        rest_of_columns = sorted(list(rest_of_columns))
+        X = X[cont_value_columns+rest_of_columns]
+
         # Clear df_model memory
         del self.df_model
 
@@ -51,8 +57,7 @@ class ModelInputPreprocessor(ModelInputETL):
             X, y, test_size=0.2, random_state=1)
 
         # Clear X and y from memory
-        del X
-        del y
+        del X, y
 
         # Create Train and Validation Split
         X_train, X_valid, y_train, y_valid = train_test_split(
@@ -66,15 +71,19 @@ class ModelInputPreprocessor(ModelInputETL):
     def _scale_train_valid_test(self):
         print('Scaling Data')
         """Scale all Ind. Variable (Features)"""
-        sc = StandardScaler()
-        columns = self.df_X_train.columns
+        scaler = StandardScaler()
+        index = len(self.cont_num_columns+self.discrete_num_columns)
+        columns = self.df_X_train.iloc[:,:index].columns
 
-        # Scale DFs
-        self.df_X_train = pd.DataFrame(sc.fit_transform(self.df_X_train))
-        self.df_X_valid = pd.DataFrame(sc.transform(self.df_X_valid))
-        self.df_X_test = pd.DataFrame(sc.transform(self.df_X_test))
-        
-        # Rename colums
+        # Scale DFs and re-name columns
+        self.df_X_train = pd.DataFrame(scaler.fit_transform(self.df_X_train.iloc[:,:index]))
         self.df_X_train.columns = columns
+        self.df_X_train = pd.concat((self.df_X_train.iloc[:,index:],self.df_X_train), axis=1)
+
+        self.df_X_valid = pd.DataFrame(scaler.transform(self.df_X_valid.iloc[:,:index]))
         self.df_X_valid.columns = columns
+        self.df_X_valid = pd.concat((self.df_X_valid.iloc[:,index],self.df_X_valid), axis=1)
+
+        self.df_X_test = pd.DataFrame(scaler.transform(self.df_X_test.iloc[:,:index]))
         self.df_X_test.columns = columns
+        self.df_X_test = pd.concat((self.df_X_test.iloc[:,index:],self.df_X_test), axis=1)

@@ -1,4 +1,5 @@
-from src.features.numeric.NumericFeatureCreator import NumericFeatureCreator
+from src.features.numeric.ContinuousNumericFeatureCreator import ContinuousNumericFeatureCreator
+from src.features.numeric.DiscreteNumericFeatureCreator import DiscreteNumericFeatureCreator
 from src.features.targetvar.TargetVariableCreator import TargetVariableCreator
 from src.features.categorical.CategoricalFeatureCreator import CategoricalFeatureCreator
 from src.features.verbose.VerboseFeatureCreator import VerboseFeatureCreator
@@ -31,10 +32,15 @@ class ModelInputETL():
         target = TargetVariableCreator(self.dataset,self.target_var)
         target.run_feature_etl()
     
-        # ETL Numeric Features
-        print('Performing ETL: Numeric Features')
-        numeric = NumericFeatureCreator(self.dataset, cont_num_columns=self.cont_num_columns, discrete_num_columns=self.discrete_num_columns)
-        numeric.run_feature_etl()
+        # ETL Continuous Numeric Features
+        print('Performing ETL: Continuous Numeric Features')
+        contnumeric = ContinuousNumericFeatureCreator(self.dataset, cont_num_columns=self.cont_num_columns)
+        contnumeric.run_feature_etl()
+
+        # ETL Discrete Numeric Features
+        print('Performing ETL: Discrete Numeric Features')
+        discretenumeric = DiscreteNumericFeatureCreator(self.dataset, discrete_num_columns=self.discrete_num_columns)
+        discretenumeric.run_feature_etl()
 
         # ETL Categorical Features
         print('Performing ETL: Categorical Features')
@@ -47,10 +53,11 @@ class ModelInputETL():
         verbose.run_feature_etl()
 
         # Return Model Input DF
-        self.df_model = pd.concat([target.df_etl,numeric.df_etl,categorical.df_etl,verbose.df_etl],axis=1)
+        self.df_model = pd.concat([target.df_etl,contnumeric.df_etl,discretenumeric.df_etl,categorical.df_etl,verbose.df_etl],axis=1)
 
         # Remove variables from memory
         del target
-        del numeric
+        del contnumeric
+        del discretenumeric
         del categorical
         del verbose

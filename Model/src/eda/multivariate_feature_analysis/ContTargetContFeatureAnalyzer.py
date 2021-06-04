@@ -24,9 +24,9 @@ class ContTargetContFeatureAnalyzer():
         num_columns_value = [x+self.suffix for x in self.feature_col_names]
 
         # Plot Target vs all Features
-        g = sns.pairplot(data=self.dataset,
-                         y_vars=self.target_col_name,
-                         x_vars=num_columns_value)
+        g = sns.pairplot(self.dataset[[self.target_col_name]+num_columns_value],
+                    y_vars=self.target_col_name,
+                    x_vars=num_columns_value)
         g.fig.suptitle(
             f"{self.target_col_name} vs Continuous Features", y=1.08)
 
