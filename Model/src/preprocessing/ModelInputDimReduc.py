@@ -16,38 +16,34 @@ class ModelInputDimReduc(ModelInputPreprocessor):
         """PCA Transfrom Columns."""
 
         for key,value in self.pca_columns.items():
-            # Return DF filtered on orig columns
-            orig_columns = [x for x in self.df_X_train.columns if key+'_' in x and '_is_null' not in x]
-            orig_columns_train = self.df_X_train[orig_columns]
-            orig_columns_valid = self.df_X_valid[orig_columns]
-            orig_columns_test = self.df_X_test[orig_columns]
-            print('1')
 
-            # PCA Fit-Transform
-            value = self.pca_columns[key]
-            pca = PCA(n_components=value)
-            pca.fit(orig_columns_train)
-            new_columns_train = pd.DataFrame(pca.transform(orig_columns_train))
-            new_columns_valid = pd.DataFrame(pca.transform(orig_columns_valid))
-            new_columns_test = pd.DataFrame(pca.transform(orig_columns_test))
-            print('2')
+            if key in self.cont_num_columns+self.discrete_num_columns+self.nominal_cat_columns+self.verbose_columns:
 
-            # Drop original pre-PCA columns
-            self.df_X_train = self.df_X_train.drop(orig_columns,axis=1)
-            self.df_X_valid = self.df_X_valid.drop(orig_columns,axis=1)
-            self.df_X_test = self.df_X_test.drop(orig_columns,axis=1)
-            print('3')
+                # Return DF filtered on orig columns
+                orig_columns = [x for x in self.df_X_train.columns if key+'_' in x and '_is_null' not in x]
+                orig_columns_train = self.df_X_train[orig_columns]
+                orig_columns_valid = self.df_X_valid[orig_columns]
+                orig_columns_test = self.df_X_test[orig_columns]
 
-            # Drop original pre-PCA columns
-            new_columns_train.columns = [key + '_pca_' + str(col) for col in new_columns_train.columns]
-            new_columns_valid.columns = [key + '_pca_' + str(col) for col in new_columns_valid.columns]
-            new_columns_test.columns = [key + '_pca_' + str(col) for col in new_columns_test.columns]
-            print('4')
+                # PCA Fit-Transform
+                value = self.pca_columns[key]
+                pca = PCA(n_components=value)
+                pca.fit(orig_columns_train)
+                new_columns_train = pd.DataFrame(pca.transform(orig_columns_train))
+                new_columns_valid = pd.DataFrame(pca.transform(orig_columns_valid))
+                new_columns_test = pd.DataFrame(pca.transform(orig_columns_test))
 
-            # Combine PCA df with train,valid,test dfs
-            self.df_X_train = pd.concat([self.df_X_train,new_columns_train],axis=1)
-            self.df_X_valid = pd.concat([self.df_X_valid,new_columns_valid],axis=1)
-            self.df_X_test = pd.concat([self.df_X_test,new_columns_test],axis=1)
-            print('5')
+                # Drop original pre-PCA columns
+                self.df_X_train = self.df_X_train.drop(orig_columns,axis=1)
+                self.df_X_valid = self.df_X_valid.drop(orig_columns,axis=1)
+                self.df_X_test = self.df_X_test.drop(orig_columns,axis=1)
 
-        
+                # Drop original pre-PCA columns
+                new_columns_train.columns = [key + '_pca_' + str(col) for col in new_columns_train.columns]
+                new_columns_valid.columns = [key + '_pca_' + str(col) for col in new_columns_valid.columns]
+                new_columns_test.columns = [key + '_pca_' + str(col) for col in new_columns_test.columns]
+
+                # Combine PCA df with train,valid,test dfs
+                self.df_X_train = pd.concat([self.df_X_train,new_columns_train],axis=1)
+                self.df_X_valid = pd.concat([self.df_X_valid,new_columns_valid],axis=1)
+                self.df_X_test = pd.concat([self.df_X_test,new_columns_test],axis=1)        
