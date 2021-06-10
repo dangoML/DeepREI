@@ -40,6 +40,7 @@ class ModelInputPreprocessor(ModelInputETL):
         """Split dataset into training, validation, test"""
 
         # Specify X and y
+        self.df_model = self.df_model.sample(frac = 1)
         y = self.df_model[self.target_var]
         X = self.df_model.drop(self.target_var, axis=1)
 
@@ -63,10 +64,10 @@ class ModelInputPreprocessor(ModelInputETL):
         X_train, X_valid, y_train, y_valid = train_test_split(
             X_train, y_train, test_size=0.25)  # 0.25 x 0.8 = 0.2
 
-        # Assign splits to respective tuple objects, reset indexes
-        self.df_X_train, self.df_y_train = X_train.reset_index(drop=True), y_train.reset_index(drop=True)
-        self.df_X_valid, self.df_y_valid = X_valid.reset_index(drop=True), y_valid.reset_index(drop=True)
-        self.df_X_test, self.df_y_test = X_test.reset_index(drop=True), y_test.reset_index(drop=True)
+        # Assign splits to respective tuple objects
+        self.df_X_train, self.df_y_train = X_train, y_train
+        self.df_X_valid, self.df_y_valid = X_valid, y_valid
+        self.df_X_test, self.df_y_test = X_test, y_test
 
     def _scale_train_valid_test(self):
         print('Scaling Data')
@@ -75,15 +76,23 @@ class ModelInputPreprocessor(ModelInputETL):
         index = len(self.cont_num_columns+self.discrete_num_columns)
         columns = self.df_X_train.iloc[:,:index].columns
 
-        # Scale DFs and re-name columns
-        self.df_X_train_num = pd.DataFrame(scaler.fit_transform(self.df_X_train.iloc[:,:index]))
-        self.df_X_train_num.columns = columns
-        self.df_X_train = pd.concat((self.df_X_train.iloc[:,index:],self.df_X_train_num), axis=1)
+        scaled_features = self.df_X_train.copy()
+        features = scaled_features[columns]
+        scaler = StandardScaler().fit(features.values)
+        features = scaler.transform(features.values)
+        scaled_features[columns] = features
+        self.df_X_train = scaled_features.copy()
 
-        self.df_X_valid_num = pd.DataFrame(scaler.transform(self.df_X_valid.iloc[:,:index]))
-        self.df_X_valid_num.columns = columns
-        self.df_X_valid = pd.concat((self.df_X_valid.iloc[:,index:],self.df_X_valid_num), axis=1)
+        scaled_features = self.df_X_valid.copy()
+        features = scaled_features[columns]
+        features = scaler.transform(features.values)
+        scaled_features[columns] = features
+        self.df_X_valid = scaled_features.copy()
 
-        self.df_X_test_num = pd.DataFrame(scaler.transform(self.df_X_test.iloc[:,:index]))
-        self.df_X_test_num.columns = columns
-        self.df_X_test = pd.concat((self.df_X_test.iloc[:,index:],self.df_X_test_num), axis=1)
+        scaled_features = self.df_X_test.copy()
+        features = scaled_features[columns]
+        features = scaler.transform(features.values)
+        scaled_features[columns] = features
+        self.df_X_test = scaled_features.copy()
+
+        del scaled_features, features

@@ -21,9 +21,9 @@ class ModelInputDimReduc(ModelInputPreprocessor):
 
                 # Return DF filtered on orig columns
                 orig_columns = [x for x in self.df_X_train.columns if key+'_' in x and '_is_null' not in x]
-                orig_columns_train = self.df_X_train[orig_columns]
-                orig_columns_valid = self.df_X_valid[orig_columns]
-                orig_columns_test = self.df_X_test[orig_columns]
+                orig_columns_train = self.df_X_train[orig_columns].dropna()
+                orig_columns_valid = self.df_X_valid[orig_columns].dropna()
+                orig_columns_test = self.df_X_test[orig_columns].dropna()
 
                 # PCA Fit-Transform
                 value = self.pca_columns[key]
@@ -42,6 +42,11 @@ class ModelInputDimReduc(ModelInputPreprocessor):
                 new_columns_train.columns = [key + '_pca_' + str(col) for col in new_columns_train.columns]
                 new_columns_valid.columns = [key + '_pca_' + str(col) for col in new_columns_valid.columns]
                 new_columns_test.columns = [key + '_pca_' + str(col) for col in new_columns_test.columns]
+
+                # Re-assign indexes
+                new_columns_train.index = self.df_X_train.index
+                new_columns_valid.index = self.df_X_valid.index
+                new_columns_test.index = self.df_X_test.index
 
                 # Combine PCA df with train,valid,test dfs
                 self.df_X_train = pd.concat([self.df_X_train,new_columns_train],axis=1)

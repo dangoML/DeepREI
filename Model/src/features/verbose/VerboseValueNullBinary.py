@@ -15,16 +15,17 @@ class VerboseValueNullBinary(FeatureETLEngineering):
         """Run ETL of the column."""
         self._replace_nans()
         self._add_is_null_column_df()
-        self._string_to_list()
+        self._clean_string_to_list()
         self._word_count_catergorical()
         self._build_feature_etl_df()
 
-    def _string_to_list(self):
+    def _clean_string_to_list(self):
         """Clean up strings and transform them into list of strings."""
 
         def _remove_punctuation_make_list(row):
             try:
                 clean = re.sub(r'[^\w\s]', '', row.lower()).split(' ')
+                clean = [x.replace('\n', '') for x in clean]
                 return clean
 
             except:
