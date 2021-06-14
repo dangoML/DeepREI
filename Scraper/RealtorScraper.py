@@ -52,7 +52,7 @@ class RealtorScraper(scrapy.Spider):
         'DOWNLOAD_TIMEOUT': 600,
         'DOWNLOADER_MIDDLEWARES': {'scrapy_crawlera.CrawleraMiddleware': 610},
         'CRAWLERA_ENABLED': True,
-        'CRAWLERA_APIKEY': 'b7b968b6eaf644f8ad3aadd7ed352aff',
+        'CRAWLERA_APIKEY': SCRAPY_API,
         'CONCURRENT_REQUESTS': 2,
         'AUTOTHROTTLE_ENABLED': False,
         'CONCURRENT_REQUESTS_PER_DOMAIN': 32}
@@ -60,9 +60,9 @@ class RealtorScraper(scrapy.Spider):
     # Function: For Each Zipcode,
     def start_requests(self):
         for pc in postcodes:
-            urlsold = f'https://www.realtor.com/soldhomeprices/{pc}'
-            yield scrapy.Request(url=urlsold, meta={'listingtype': 'sold'})
-            urlbuy = f'https://www.realtor.com/realestateandhomes-search/{pc}'
+            # urlsold = f'https://www.realtor.com/soldhomeprices/{pc}'
+            # yield scrapy.Request(url=urlsold, meta={'listingtype': 'sold'})
+            urlbuy = f'https://www.realtor.com/realestateandhomes-search/{pc}/type-single-family-home'
             yield scrapy.Request(url=urlbuy, meta={'listingtype': 'buy'})
 
     def parse(self, response, **kwargs):
@@ -420,9 +420,10 @@ class RealtorScraper(scrapy.Spider):
 
                     break
 
-                cur.execute(
-                    'INSERT INTO public.realtortable2(PropertyUrl, ListingType, ForSalePrice, LastSoldPrice, description, bedroom, TotalBathrooms, FullBathrooms, HalfBathrooms, BathroomDescription, InteriorFeatures, CoolingFeatures, HeatingFeatures, DiningRoomDescription, ExteriorandLotFeatures, WaterFeatures, WaterfrontDescription, PoolFeatures, PoolDescription, ManufacturedMode, GarageSpaces, ParkingFeatures, HomeFeaturesView, OtherEquipment, ElementarySchool,  HighSchool, MiddleSchool, AssociationFeeAmenitie, Association, AssociationAmenities, AssociationFee, AssociationFeeFrequency, CalculatedTotalMonthlyAssociation, MaintenanceDescription, PetDescription, AnnualTaxAmount, SourceListingStatus, County, Directions, TaxYear, Restrictions, SourcePropertyType, Area, SourceNeighborhood, PostalCode, PublicSurveySection, Subdivision, Zoning, SourceSystemName, TotalSquareFeetLiving, YearBuilt, ConstructionMaterials, DirectionFaces, PropertyAge, Roof, LevelsorStories, StructureType, HouseStyle, TotalAreaSqft, YearBuiltDetails, ArchitecturalStyle, Sewer, WaterSource)' + f"VALUES ('{link}', '{ListingType}', '{ForSalePrice}', '{LastSoldPrice}', '{description}', '{bedroom}', '{TotalBathrooms}', '{FullBathrooms}', '{HalfBathrooms}', '{BathroomDescription}', '{InteriorFeatures}', '{CoolingFeatures}', '{HeatingFeatures}', '{DiningRoomDescription}', '{ExteriorandLotFeatures}', '{WaterFeatures}', '{WaterfrontDescription}', '{PoolFeatures}', '{PoolDescription}', '{Mode}', '{GarageSpaces}', '{ParkingFeatures}', '{View}', '{OtherEquipment}', '{ElementarySchool}', '{HighSchool}', '{MiddleSchool}', '{AssociationFeeAmenitie}', '{Association}', '{AssociationAmenities}', '{AssociationFee}', '{AssociationFeeFrequency}', '{CalculatedTotalMonthlyAssociation}', '{MaintenanceDescription}', '{PetDescription}', '{AnnualTaxAmount}', '{SourceListingStatus}', '{County}', '{Directions}', '{TaxYear}', '{Restrictions}', '{SourcePropertyType}', '{Area}', '{SourceNeighborhood}', '{PostalCode}', '{PublicSurveySection}', '{Subdivision}', '{Zoning}', '{SourceSystemName}', '{TotalSquareFeetLiving}', '{YearBuilt}', '{ConstructionMaterials}', '{DirectionFaces}', '{PropertyAge}', '{Roof}', '{LevelsorStories}', '{StructureType}', '{HouseStyle}', '{TotalAreaSqft}', '{YearBuiltDetails}', '{ArchitecturalStyle}', '{Sewer}', '{WaterSource}')")
-                connection.commit()
+                # cur.execute(
+                #     'INSERT INTO public.realtortable2(PropertyUrl, ListingType, ForSalePrice, LastSoldPrice, description, bedroom, TotalBathrooms, FullBathrooms, HalfBathrooms, BathroomDescription, InteriorFeatures, CoolingFeatures, HeatingFeatures, DiningRoomDescription, ExteriorandLotFeatures, WaterFeatures, WaterfrontDescription, PoolFeatures, PoolDescription, ManufacturedMode, GarageSpaces, ParkingFeatures, HomeFeaturesView, OtherEquipment, ElementarySchool,  HighSchool, MiddleSchool, AssociationFeeAmenitie, Association, AssociationAmenities, AssociationFee, AssociationFeeFrequency, CalculatedTotalMonthlyAssociation, MaintenanceDescription, PetDescription, AnnualTaxAmount, SourceListingStatus, County, Directions, TaxYear, Restrictions, SourcePropertyType, Area, SourceNeighborhood, PostalCode, PublicSurveySection, Subdivision, Zoning, SourceSystemName, TotalSquareFeetLiving, YearBuilt, ConstructionMaterials, DirectionFaces, PropertyAge, Roof, LevelsorStories, StructureType, HouseStyle, TotalAreaSqft, YearBuiltDetails, ArchitecturalStyle, Sewer, WaterSource)' + f"VALUES ('{link}', '{ListingType}', '{ForSalePrice}', '{LastSoldPrice}', '{description}', '{bedroom}', '{TotalBathrooms}', '{FullBathrooms}', '{HalfBathrooms}', '{BathroomDescription}', '{InteriorFeatures}', '{CoolingFeatures}', '{HeatingFeatures}', '{DiningRoomDescription}', '{ExteriorandLotFeatures}', '{WaterFeatures}', '{WaterfrontDescription}', '{PoolFeatures}', '{PoolDescription}', '{Mode}', '{GarageSpaces}', '{ParkingFeatures}', '{View}', '{OtherEquipment}', '{ElementarySchool}', '{HighSchool}', '{MiddleSchool}', '{AssociationFeeAmenitie}', '{Association}', '{AssociationAmenities}', '{AssociationFee}', '{AssociationFeeFrequency}', '{CalculatedTotalMonthlyAssociation}', '{MaintenanceDescription}', '{PetDescription}', '{AnnualTaxAmount}', '{SourceListingStatus}', '{County}', '{Directions}', '{TaxYear}', '{Restrictions}', '{SourcePropertyType}', '{Area}', '{SourceNeighborhood}', '{PostalCode}', '{PublicSurveySection}', '{Subdivision}', '{Zoning}', '{SourceSystemName}', '{TotalSquareFeetLiving}', '{YearBuilt}', '{ConstructionMaterials}', '{DirectionFaces}', '{PropertyAge}', '{Roof}', '{LevelsorStories}', '{StructureType}', '{HouseStyle}', '{TotalAreaSqft}', '{YearBuiltDetails}', '{ArchitecturalStyle}', '{Sewer}', '{WaterSource}')")
+                # connection.commit()
+            
             elif 'Property Details' in ''.join(response.css('#ldp-collapsed-property-details h2::text').extract()).strip():
                 link = response.url
                 ListingType = response.meta['listingtype']

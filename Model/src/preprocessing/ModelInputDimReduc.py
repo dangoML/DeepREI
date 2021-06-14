@@ -16,9 +16,7 @@ class ModelInputDimReduc(ModelInputPreprocessor):
         """PCA Transfrom Columns."""
 
         for key,value in self.pca_columns.items():
-
             if key in self.cont_num_columns+self.discrete_num_columns+self.nominal_cat_columns+self.verbose_columns:
-
                 # Return DF filtered on orig columns
                 orig_columns = [x for x in self.df_X_train.columns if key+'_' in x and '_is_null' not in x]
                 orig_columns_train = self.df_X_train[orig_columns].dropna()
