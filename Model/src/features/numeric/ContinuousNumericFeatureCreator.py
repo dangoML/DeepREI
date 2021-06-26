@@ -1,6 +1,6 @@
 from src.features.numeric.NumericValueNull import NumericValueNull
 # from src.features.numeric.numeric_custom_features.NumericValueNull_longlat import NumericValueNull_longlat
-# from src.features.numeric.numeric_custom_features.NumericValueNull_longlatxyz import NumericValueNull_longlatxyz
+from src.features.numeric.numeric_custom_features.NumericValueNull_longlat_xyz import NumericValueNull_longlat_xyz
 
 import pandas as pd
 
@@ -28,7 +28,14 @@ class ContinuousNumericFeatureCreator():
     
     def _create_custom_numeric_features(self):
         """Create custom Continuous Numeric features and add to Model Input DF."""
-        pass
+        # pass
+        # long/Lat Cos/Sin  Handler
+        numeric = NumericValueNull_longlat_xyz(
+            self.dataset[['Longitude','Latitude']])
+        numeric.run_etl()
+        self.numeric_custom_columns += ['Longitude','Latitude']
+        self.df_etl = pd.concat(
+                [self.df_etl, numeric.df_etl], axis=1)
 
     def _create_numeric_features(self):
         """ETL our Numeric Features."""

@@ -9,8 +9,12 @@ class FeatureETLEngineering:
         """
         # ETL Inputs
         self.col_series = col_series
-        self.name = self.col_series.name
         self.col_etl = col_series.copy()
+        
+        try:
+            self.name = self.col_etl.name
+        except:
+            pass
 
         # ETL Outputs
         self.df_etl = pd.DataFrame()
@@ -35,15 +39,30 @@ class FeatureETLEngineering:
 
     def _add_is_null_column_df(self):
         """Create an is_null column."""
-       # Grab indexes of null columns
-        null_indexes = pd.isna(self.col_etl)
 
-        # Create 'null' column variant names
-        null_key = "_".join([self.name, "is_null"])
+        # Check if instance is DF or Series and handle appropriately
+        if isinstance(self.col_etl, pd.DataFrame):
+            for column in self.col_etl.columns:
+                # Grab indexes of null values
+                null_indexes = pd.isna(self.col_etl[column])
 
-        # Create Binary 'null' column variants in DataFrame
-        self.df_null[null_key] = self.col_etl.fillna(1)
-        self.df_null[null_key].loc[~null_indexes] = 0
+                # Create 'null' column variant names
+                null_key = "_".join([column, "is_null"])
+
+                # Create Binary 'null' column variants in DataFrame
+                self.df_null[null_key] = self.col_etl[column].fillna(1)
+                self.df_null[null_key].loc[~null_indexes] = 0
+
+        else:
+            # Grab indexes of null values
+            null_indexes = pd.isna(self.col_etl)
+
+            # Create 'null' column variant names
+            null_key = "_".join([self.name, "is_null"])
+
+            # Create Binary 'null' column variants in DataFrame
+            self.df_null[null_key] = self.col_etl.fillna(1)
+            self.df_null[null_key].loc[~null_indexes] = 0
 
     def _one_hot_encode_df(self):
         """One Hot Encode and add new columns to df_etl"""
@@ -53,7 +72,7 @@ class FeatureETLEngineering:
 
         # Concat One-Hot Columns to df
         self.df_etl = pd.concat([self.df_etl, temp_dummies_df], axis=1)
-
+    
     def _build_feature_etl_df(self):
         """Combine all dfs into one and cast as float"""
         self.df_etl = pd.concat(

@@ -7,10 +7,10 @@ import numpy as np
 
 class ModelInputPreprocessor(ModelInputETL):
     def __init__(self, dataset, target_var='', cont_num_columns=[], discrete_num_columns=[], nominal_cat_columns=[], 
-                        verbose_columns=[], verbose_threshold=[], verbose_most_common=[], pca_columns=[], pca_expl_var=.95):
+                        verbose_columns=[], verbose_threshold=[], verbose_most_common=[], pca_columns=[], pca_expl_var=.95, operation='model'):
         """Instantiate Model Input Table."""
         super().__init__(dataset, target_var, cont_num_columns, discrete_num_columns,
-                         nominal_cat_columns, verbose_columns, verbose_threshold, verbose_most_common, pca_columns, pca_expl_var)
+                         nominal_cat_columns, verbose_columns, verbose_threshold, verbose_most_common, pca_columns, pca_expl_var, operation)
 
         # Outputs
         self.df_X_train = pd.DataFrame()
@@ -45,7 +45,7 @@ class ModelInputPreprocessor(ModelInputETL):
         X = self.df_model.drop(self.target_var, axis=1)
 
         # Re-Order X columns
-        cont_value_columns = [x+'_value' for x in self.cont_num_columns+self.discrete_num_columns]
+        cont_value_columns = [x for x in self.df_model.columns if '_value' in x]
         rest_of_columns = set(X.columns).difference(set(cont_value_columns))
         rest_of_columns = sorted(list(rest_of_columns))
         X = X[cont_value_columns+rest_of_columns]

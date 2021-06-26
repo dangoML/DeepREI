@@ -1,6 +1,7 @@
 from src.features.categorical.CategoricalValueNullBinaryNominal import CategoricalValueNullBinaryNominal
 from src.features.categorical.nominal_custom_features.CategoricalValueNullBinaryNominal_area import CategoricalValueNullBinaryNominal_area
 from src.features.categorical.nominal_custom_features.CategoricalValueNullBinaryNominal_zipcode import CategoricalValueNullBinaryNominal_zipcode
+from src.features.categorical.nominal_custom_features.CategoricalValueNullBinaryNominal_zipcode_suffix import CategoricalValueNullBinaryNominal_zipcode_suffix
 import pandas as pd
 
 
@@ -43,6 +44,14 @@ class CategoricalFeatureCreator():
             self.dataset['propertyurl'])
         categorical.run_etl()
         self.cat_custom_nominals += ['zipcode']
+        self.df_etl = pd.concat(
+                [self.df_etl, categorical.df_etl], axis=1)
+
+        # Zipcode Delivery Sector Custom Handler
+        categorical = CategoricalValueNullBinaryNominal_zipcode_suffix(
+            self.dataset['zipcode_suffix'])
+        categorical.run_etl()
+        self.cat_custom_nominals += ['zipcode_suffix']
         self.df_etl = pd.concat(
                 [self.df_etl, categorical.df_etl], axis=1)
 

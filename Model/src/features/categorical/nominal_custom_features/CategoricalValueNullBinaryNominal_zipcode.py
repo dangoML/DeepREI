@@ -20,3 +20,4 @@ class CategoricalValueNullBinaryNominal_zipcode(FeatureETLEngineering):
         self.col_etl = self.col_etl.str.split('_FL_', expand = True)[1]
         self.col_etl = self.col_etl.str.slice(0, 5)
         self.col_etl.name = 'zipcode'
+        # self.col_etl.to_csv('zipcodes.csv')

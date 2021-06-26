@@ -6,10 +6,10 @@ import numpy as np
 
 class ModelInputDimReduc(ModelInputPreprocessor):
     def __init__(self, dataset, target_var='', cont_num_columns=[], discrete_num_columns=[], nominal_cat_columns=[], 
-                        verbose_columns=[], verbose_threshold=[], verbose_most_common=[], pca_columns=[], pca_expl_var=.95):
+                        verbose_columns=[], verbose_threshold=[], verbose_most_common=[], pca_columns=[], pca_expl_var=.95, operation='model'):
         """Instantiate Model Input Table."""
         super().__init__(dataset, target_var, cont_num_columns, discrete_num_columns,
-                         nominal_cat_columns, verbose_columns, verbose_threshold, verbose_most_common, pca_columns, pca_expl_var)
+                         nominal_cat_columns, verbose_columns, verbose_threshold, verbose_most_common, pca_columns, pca_expl_var, operation)
 
     def _pca_transform(self):
         print('Performing PCA on Select Features')

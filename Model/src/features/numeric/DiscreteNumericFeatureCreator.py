@@ -38,24 +38,6 @@ class DiscreteNumericFeatureCreator():
         self.df_etl = pd.concat(
                 [self.df_etl, numeric.df_etl], axis=1)
 
-        # # longitude/Latitude Handler
-        # numeric = NumericValueNull_longlat(
-        #     self.dataset['propertyurl'])
-        # numeric.run_etl()
-        # self.numeric_custom_columns += ['Longitude','Latitude']
-        # self.dataset = pd.concat(
-        #         [self.dataset, numeric.df_etl], axis=1)
-        
-        # print(self.dataset['Longitude','Latitude'])
-
-        # # long/Lat Cos/Sin  Handler
-        # numeric = NumericValueNull_longlatxyz(
-        #     self.dataset['Longitude','Latitude'])
-        # numeric.run_etl()
-        # self.df_etl = pd.concat(
-        #         [self.df_etl, numeric.df_etl], axis=1)
-        # print(numeric.df_etl)
-
     def _create_numeric_features(self):
         """ETL our Numeric Features."""
         # Loop through each column and create numeric feature

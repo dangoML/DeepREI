@@ -8,7 +8,7 @@ import pandas as pd
 
 class ModelInputETL():
     def __init__(self, dataset, target_var='', cont_num_columns=[], discrete_num_columns=[], nominal_cat_columns=[], 
-                        verbose_columns=[], verbose_threshold=[], verbose_most_common=[], pca_columns=[], pca_expl_var=.95):
+                        verbose_columns=[], verbose_threshold=[], verbose_most_common=[], pca_columns=[], pca_expl_var=.95, operation='model'):
         """Create Features from Raw Data."""
         # Inputs
         self.dataset = dataset[dataset['listingtype'] == 'sold']
@@ -21,6 +21,7 @@ class ModelInputETL():
         self.verbose_most_common = verbose_most_common
         self.pca_columns = pca_columns
         self.pca_expl_var = pca_expl_var
+        self.operation = operation
 
         # Outputs
         self.df_model = pd.DataFrame()
